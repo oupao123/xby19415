@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acciones Españolas | Mejores Acciones del Mercado Español</title>
+    <meta name="description" content="Consulta las cotizaciones en tiempo real de las mejores acciones españolas. Inversiones seguras y rentables en el mercado bursátil español.">
+    <!-- Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Configuración de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0056b3', // Azul español
+                        secondary: '#e63946', // Rojo español
+                        neutral: '#f8f9fa',
+                        dark: '#212529',
+                        whatsapp: '#25D366' // WhatsApp绿色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .stock-up {
+                color: #16a34a; /* Verde para subidas */
+            }
+            .stock-down {
+                color: #dc2626; /* Rojo para bajadas */
+            }
+            .stock-stable {
+                color: #6b7280; /* Gris para estables */
+            }
+            .shadow-custom {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral font-sans text-dark">
+    <!-- Header/Navegación -->
+    <header class="bg-white shadow-custom sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i class="fa-solid fa-chart-line text-primary text-2xl mr-3"></i>
+                <h1 class="text-xl font-bold text-primary">BolsaEspanola</h1>
+            </div>
+            
+            <nav class="flex space-x-6">
+                <a href="#mercado" class="text-dark hover:text-primary transition-colors font-medium">Mercado</a>
+                <a href="#mejores-acciones" class="text-dark hover:text-primary transition-colors font-medium">Mejores Acciones</a>
+                <a href="#analisis" class="text-dark hover:text-primary transition-colors font-medium">Análisis</a>
+                <a href="#socio" class="text-dark hover:text-primary transition-colors font-medium">Ser Socio</a>
+                <a href="#contacto" class="text-dark hover:text-primary transition-colors font-medium">Contacto</a>
+            </nav>
+            
+            <!-- 隐藏 Ver Cartera 按钮 - 添加 hidden 类 -->
+            <div class="mt-4 md:mt-0 hidden">
+                <button class="bg-primary hover:bg-primary/90 text-white py-2 px-6 rounded-lg transition-colors font-medium">
+                    Ver Cartera <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección Hero -->
+    <section class="bg-gradient-to-r from-primary/90 to-primary py-16 md:py-24 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+                    Invierta en las Mejores Acciones Españolas
+                </h2>
+                <p class="text-lg md:text-xl mb-8 opacity-90">
+                    Accede a cotizaciones en tiempo real, análisis expertos y recomendaciones de las acciones más rentables del mercado español.
+                </p>
+                <!-- 合并后的 WhatsApp 按钮 - 已修改号码和默认消息 -->
+                <div class="flex justify-center">
+                    <a href="https://wa.me/+85265621852?text=Quiero%20obtener%20información%20sobre%20acciones%20de%20alto%20potencial,%20cómo%20puedo%20unirme%20al%20grupo?" class="inline-flex items-center gap-3 bg-whatsapp hover:bg-[#1EBE56] text-white py-4 px-8 rounded-lg font-bold text-lg transition-colors" target="_blank">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
+                        Contáctame a través de WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Mercado en Tiempo Real -->
+    <section id="mercado" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-2xl md:text-3xl font-bold mb-4">Mercado Español en Tiempo Real</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Cotizaciones actualizadas de los principales índices y acciones del mercado español (IBEX 35)
+                </p>
+                <p class="text-sm text-gray-500 mt-2">
+                    Última actualización: <span id="last-update">12:45 CET, Miércoles 21 de Enero de 2026</span>
+                </p>
+            </div>
+
+            <!-- Resumen del Mercado -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <!-- IBEX 35 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-custom hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="font-bold text-lg">IBEX 35</h4>
+                            <p class="text-gray-500 text-sm">Índice Bursátil Español</p>
+                        </div>
+                        <span class="stock-up text-lg font-bold">+0.87%</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-2">9.245,68</div>
+                    <div class="flex items-center text-sm">
+                        <i class="fa-solid fa-arrow-trend-up stock-up mr-1"></i>
+                        <span>80,52 puntos</span>
+                    </div>
+                </div>
+
+                <!-- Eurostoxx 50 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-custom hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="font-bold text-lg">EURO STOXX 50</h4>
+                            <p class="text-gray-500 text-sm">Índice Europeo</p>
+                        </div>
+                        <span class="stock-up text-lg font-bold">+0.54%</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-2">4.582,19</div>
+                    <div class="flex items-center text-sm">
+                        <i class="fa-solid fa-arrow-trend-up stock-up mr-1"></i>
+                        <span>24,71 puntos</span>
+                    </div>
+                </div>
+
+                <!-- EUR/USD -->
+                <div class="bg-neutral rounded-xl p-6 shadow-custom hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="font-bold text-lg">EUR/USD</h4>
+                            <p class="text-gray-500 text-sm">Tipo de Cambio</p>
+                        </div>
+                        <span class="stock-down text-lg font-bold">-0.12%</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-2">1,0892</div>
+                    <div class="flex items-center text-sm">
+                        <i class="fa-solid fa-arrow-trend-down stock-down mr-1"></i>
+                        <span>0,0013 puntos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Acciones en Tiempo Real -->
+            <div class="overflow-x-auto bg-white rounded-xl shadow-custom">
+                <table class="w-full min-w-[768px]">
+                    <thead>
+                        <tr class="bg-neutral border-b">
+                            <th class="py-4 px-6 text-left font-bold text-gray-700">Acción</th>
+                            <th class="py-4 px-6 text-right font-bold text-gray-700">Precio (€)</th>
+                            <th class="py-4 px-6 text-right font-bold text-gray-700">Variación (%)</th>
+                            <th class="py-4 px-6 text-right font-bold text-gray-700">Máx. Diario (€)</th>
+                            <th class="py-4 px-6 text-right font-bold text-gray-700">Mín. Diario (€)</th>
+                            <th class="py-4 px-6 text-right font-bold text-gray-700">Volumen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Banco Santander (BME: SAN) - Acción Premium -->
+                        <tr class="border-b hover:bg-neutral/50 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <span class="bg-primary/10 text-primary text-xs font-bold py-1 px-2 rounded mr-3">TOP</span>
+                                    <div>
+                                        <div class="font-medium">Banco Santander</div>
+                                        <div class="text-xs text-gray-500">SAN · IBEX 35</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right font-medium">3,875</td>
+                            <td class="py-4 px-6 text-right stock-up font-medium">+1.24%</td>
+                            <td class="py-4 px-6 text-right">3,890</td>
+                            <td class="py-4 px-6 text-right">3,812</td>
+                            <td class="py-4 px-6 text-right">18.245.600</td>
+                        </tr>
+                        
+                        <!-- Telefónica (BME: TEF) - Acción Premium -->
+                        <tr class="border-b hover:bg-neutral/50 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <span class="bg-primary/10 text-primary text-xs font-bold py-1 px-2 rounded mr-3">TOP</span>
+                                    <div>
+                                        <div class="font-medium">Telefónica</div>
+                                        <div class="text-xs text-gray-500">TEF · IBEX 35</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right font-medium">3,982</td>
+                            <td class="py-4 px-6 text-right stock-up font-medium">+0.97%</td>
+                            <td class="py-4 px-6 text-right">4,015</td>
+                            <td class="py-4 px-6 text-right">3,940</td>
+                            <td class="py-4 px-6 text-right">12.876.400</td>
+                        </tr>
+                        
+                        <!-- Inditex (BME: ITX) - Acción Premium -->
+                        <tr class="border-b hover:bg-neutral/50 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <span class="bg-primary/10 text-primary text-xs font-bold py-1 px-2 rounded mr-3">TOP</span>
+                                    <div>
+                                        <div class="font-medium">Inditex</div>
+                                        <div class="text-xs text-gray-500">ITX · IBEX 35</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right font-medium">32,150</td>
+                            <td class="py-4 px-6 text-right stock-up font-medium">+1.89%</td>
+                            <td class="py-4 px-6 text-right">32,340</td>
+                            <td class="py-4 px-6 text-right">31,870</td>
+                            <td class="py-4 px-6 text-right">3.456.200</td>
+                        </tr>
+                        
+                        <!-- BBVA (BME: BBVA) -->
+                        <tr class="border-b hover:bg-neutral/50 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                        <div class="font-medium">BBVA</div>
+                                        <div class="text-xs text-gray-500">BBVA · IBEX 35</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right font-medium">7,520</td>
+                            <td class="py-4 px-6 text-right stock-up font-medium">+0.78%</td>
+                            <td class="py-4 px-6 text-right">7,560</td>
+                            <td class="py-4 px-6 text-right">7,450</td>
+                            <td class="py-4 px-6 text-right">9.785.300</td>
+                        </tr>
+                        
+                        <!-- Repsol (BME: REP) -->
+                        <tr class="border-b hover:bg-neutral/50 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                        <div class="font-medium">Repsol</div>
+                                        <div class="text-xs text-gray-500">REP · IBEX 35</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right font-medium">13,890</td>
+                            <td class="py-4 px-6 text-right stock-down font-medium">-0.45%</td>
+                            <td class="py-4 px-6 text-right">13,980</td>
+                            <td class="py-4 px-6 text-right">13,810</td>
+                            <td class="py-4 px-6 text-right">4.231.800</td>
+                        </tr>
+                        
+                        <!-- Iberdrola (BME: IBE) -->
+                        <tr class="hover:bg-neutral/50 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                        <div class="font-medium">Iberdrola</div>
+                                        <div class="text-xs text-gray-500">IBE · IBEX 35</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right font-medium">11,230</td>
+                            <td class="py-4 px-6 text-right stock-stable font-medium">0.00%</td>
+                            <td class="py-4 px-6 text-right">11,280</td>
+                            <td class="py-4 px-6 text-right">11,190</td>
+                            <td class="py-4 px-6 text-right">7.890.500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Mejores Acciones -->
+    <section id="mejores-acciones" class="py-16 bg-neutral">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-2xl md:text-3xl font-bold mb-4">Nuestras Mejores Acciones Recomendadas</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Selección de acciones españolas con mayor potencial de crecimiento y rentabilidad a corto y largo plazo
+                </p>
+            </div>
+
+            <!-- Tarjetas de Mejores Acciones -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tarjeta 1: Inditex -->
+                <div class="bg-white rounded-xl shadow-custom overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary font-bold py-1 px-3 rounded-full text-sm">
+                            +18.7% (1 año)
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="text-2xl font-bold">Inditex</h4>
+                            <p class="opacity-90">ITX · Moda y Retail</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold">32,15 €</span>
+                            <span class="stock-up font-medium flex items-center">
+                                <i class="fa-solid fa-arrow-up mr-1"></i> 1.89%
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-6">
+                            Líder mundial en retail de moda con fuerte expansión internacional y excelente gestión financiera. Dividendos estables y crecimiento constante.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fa-solid fa-calendar mr-2"></i>
+                                <span>Recomendación: Compra</span>
+                            </div>
+                            <button class="text-primary font-medium hover:text-primary/80 transition-colors">
+                                Ver Detalles <i class="fa-solid fa-angle-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Banco Santander -->
+                <div class="bg-white rounded-xl shadow-custom overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gradient-to-r from-red-500 to-orange-500 relative">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary font-bold py-1 px-3 rounded-full text-sm">
+                            +22.4% (1 año)
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="text-2xl font-bold">Banco Santander</h4>
+                            <p class="opacity-90">SAN · Banca</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold">3,87 €</span>
+                            <span class="stock-up font-medium flex items-center">
+                                <i class="fa-solid fa-arrow-up mr-1"></i> 1.24%
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-6">
+                            Mayor banco de España con presencia global. Excelente rentabilidad, ratios sólidos y política de dividendos atractiva para inversores.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fa-solid fa-calendar mr-2"></i>
+                                <span>Recomendación: Compra</span>
+                            </div>
+                            <button class="text-primary font-medium hover:text-primary/80 transition-colors">
+                                Ver Detalles <i class="fa-solid fa-angle-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Telefónica -->
+                <div class="bg-white rounded-xl shadow-custom overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gradient-to-r from-green-500 to-teal-600 relative">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary font-bold py-1 px-3 rounded-full text-sm">
+                            +15.2% (1 año)
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h4 class="text-2xl font-bold">Telefónica</h4>
+                            <p class="opacity-90">TEF · Telecomunicaciones</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold">3,98 €</span>
+                            <span class="stock-up font-medium flex items-center">
+                                <i class="fa-solid fa-arrow-up mr-1"></i> 0.97%
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-6">
+                            Líder en telecomunicaciones en España y Latinoamérica. Fuerte inversión en 5G y excelente ratio de dividendos para inversores conservadores.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fa-solid fa-calendar mr-2"></i>
+                                <span>Recomendación: Compra</span>
+                            </div>
+                            <button class="text-primary font-medium hover:text-primary/80 transition-colors">
+                                Ver Detalles <i class="fa-solid fa-angle-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Análisis Gráfico -->
+    <section id="analisis" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-2xl md:text-3xl font-bold mb-4">Análisis Gráfico del IBEX 35</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Evolución del índice IBEX 35 durante los últimos 6 meses
+                </p>
+            </div>
+
+            <div class="bg-neutral rounded-xl p-6 shadow-custom max-w-4xl mx-auto">
+                <canvas id="ibexChart" height="300"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Convertirse en Socio - 已修改WhatsApp链接 -->
+    <section id="socio" class="bg-primary py-16 md:py-20 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6">¿Quieres ser nuestro socio?</h2>
+                <p class="text-lg mb-8 opacity-90 leading-relaxed">
+                    Si estás interesado en convertirte en nuestro socio, haz clic en el botón de WhatsApp a continuación para contactarnos directamente.
+                </p>
+                <a href="https://wa.me/+85265621852?text=Quiero%20obtener%20información%20sobre%20acciones%20de%20alto%20potencial,%20cómo%20puedo%20unirme%20al%20grupo?" class="whatsapp-btn inline-flex items-center gap-3 bg-whatsapp hover:bg-[#1EBE56] text-white py-4 px-8 rounded-lg font-bold text-lg transition-colors" target="_blank">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    Contáctame a través de WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fa-solid fa-chart-line text-primary text-2xl mr-3"></i>
+                        <h4 class="text-xl font-bold">BolsaEspanola</h4>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Tu fuente confiable de información y análisis sobre el mercado bursátil español.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="text-lg font-bold mb-4">Enlaces Rápidos</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#mercado" class="text-gray-400 hover:text-white transition-colors">Mercado en Tiempo Real</a></li>
+                        <li><a href="#mejores-acciones" class="text-gray-400 hover:text-white transition-colors">Mejores Acciones</a></li>
+                        <li><a href="#analisis" class="text-gray-400 hover:text-white transition-colors">Análisis Gráfico</a></li>
+                        <li><a href="#socio" class="text-gray-400 hover:text-white transition-colors">Ser Socio</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Blog de Inversión</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Acerca de Nosotros</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-lg font-bold mb-4">Acciones Populares</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Banco Santander (SAN)</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Telefónica (TEF)</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Inditex (ITX)</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">BBVA (BBVA)</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Iberdrola (IBE)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-lg font-bold mb-4">Contacto</h5>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-map-marker-alt text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">Calle Gran Vía, 86, 28013 Madrid, España</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-phone text-primary mr-3"></i>
+                            <span class="text-gray-400">+34 91 234 5678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-envelope text-primary mr-3"></i>
+                            <span class="text-gray-400">info@bolsaespanola.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    © 2026 BolsaEspanola. Todos los derechos reservados.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Política de Privacidad</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Términos y Condiciones</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Aviso Legal</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Actualizar hora de última actualización
+        function updateLastUpdate() {
+            const now = new Date();
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                weekday: 'long', 
+                day: '2-digit', 
+                month: 'long', 
+                year: 'numeric',
+                timeZone: 'Europe/Madrid'
+            };
+            const formatter = new Intl.DateTimeFormat('es-ES', options);
+            const formattedDate = formatter.format(now).replace(',', '');
+            document.getElementById('last-update').textContent = formattedDate;
+        }
+        
+        // Inicializar gráfico del IBEX 35
+        function initIbexChart() {
+            const ctx = document.getElementById('ibexChart').getContext('2d');
+            
+            // Datos simulados del IBEX 35 últimos 6 meses
+            const meses = ['Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene'];
+            const valores = [8750, 8920, 8850, 9010, 9180, 9245];
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: meses,
+                    datasets: [{
+                        label: 'IBEX 35',
+                        data: valores,
+                        borderColor: '#0056b3',
+                        backgroundColor: 'rgba(0, 86, 179, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#0056b3',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `IBEX 35: ${context.raw.toFixed(2)} puntos`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('es-ES');
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+
+        // Simular actualización de precios cada 30 segundos
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                const stockRows = document.querySelectorAll('tbody tr');
+                stockRows.forEach(row => {
+                    // Obtener precio actual
+                    const priceCell = row.querySelector('td:nth-child(2)');
+                    const changeCell = row.querySelector('td:nth-child(3)');
+                    
+                    if (priceCell && changeCell) {
+                        let currentPrice = parseFloat(priceCell.textContent.replace(',', '.'));
+                        // Generar variación aleatoria pequeña (-0.5% a +0.5%)
+                        const changePercent = (Math.random() - 0.5) * 1;
+                        const newPrice = currentPrice * (1 + changePercent / 100);
+                        
+                        // Actualizar precio
+                        priceCell.textContent = newPrice.toFixed(3).replace('.', ',');
+                        
+                        // Actualizar porcentaje de variación
+                        changeCell.textContent = `${changePercent > 0 ? '+' : ''}${changePercent.toFixed(2)}%`;
+                        
+                        // Actualizar color
+                        if (changePercent > 0) {
+                            changeCell.className = 'py-4 px-6 text-right stock-up font-medium';
+                            changeCell.innerHTML = `<i class="fa-solid fa-arrow-up mr-1"></i> ${changePercent.toFixed(2)}%`;
+                        } else if (changePercent < 0) {
+                            changeCell.className = 'py-4 px-6 text-right stock-down font-medium';
+                            changeCell.innerHTML = `<i class="fa-solid fa-arrow-down mr-1"></i> ${changePercent.toFixed(2)}%`;
+                        } else {
+                            changeCell.className = 'py-4 px-6 text-right stock-stable font-medium';
+                            changeCell.textContent = '0.00%';
+                        }
+                    }
+                });
+                
+                updateLastUpdate();
+            }, 30000); // Actualizar cada 30 segundos
+        }
+
+        // Inicializar todo al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdate();
+            initIbexChart();
+            simulateRealTimeUpdates();
+            
+            // Smooth scroll para enlaces internos
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
